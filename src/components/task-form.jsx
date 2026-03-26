@@ -7,7 +7,7 @@ export default function TaskForm() {
     const [task, setTask] = useState({
         title: '',
         description: '',
-        image: ''
+        image: null
     });
 
     const handleSubmit = async (e) => {
@@ -15,14 +15,14 @@ export default function TaskForm() {
         try {
             const supabase = createClient();
 
-            const { data: {user} } = await supabase.auth.getUser();
+            const { data: { user } } = await supabase.auth.getUser();
 
             if (task.image.type !== 'image/png' && task.image.type !== 'image/jpeg') {
                 alert("Solo se permiten imagenes")
                 return
             }
 
-            if(!user){
+            if (!user) {
                 alert("No hay un usuario")
                 return
             }
@@ -37,7 +37,7 @@ export default function TaskForm() {
 
             console.log('img data', dataImage);
             console.error(errorImage);
-            if(errorImage){
+            if (errorImage) {
                 alert("Error al subir la imagen")
                 return
             }
@@ -47,6 +47,7 @@ export default function TaskForm() {
                     title: task.title,
                     description: task.description,
                     user_id: userData.user.id,
+                    image: dataImage.path,
                 });
 
 
@@ -57,11 +58,27 @@ export default function TaskForm() {
     }
 
     return (
-        <form >
-            <input type="text" placeholder="Titulo de la tarea" onChange={(e) => setTask({ ...task, title: e.target.value })} />
-            <input type="text" placeholder="Descripcion de tarea" onChange={(e) => setTask({ ...task, description: e.target.value })} />
+        <form className="flex flex-col bg-red-500 w-[50%] mx-auto p-3 rounded-2xl gap-5">
+            <input
+                type="text"
+                placeholder="Titulo de la tarea"
+                onChange={(e) => setTask({ ...task, title: e.target.value })}
+                className="border border-white p-2"
+            />
+            <textarea
+                type="text"
+                placeholder="Descripcion de tarea"
+                
+                onChange={(e) => setTask({ ...task, description: e.target.value })}
+                className="border border-white p-2"
+            />
             <input type="file" onChange={(e) => setTask({ ...task, image: e.target.files[0] })} name="imagen" />
-            <button onClick={handleSubmit}>Registrar tarea</button>
+            {
+                task.image
+                &&
+                <img src={URL.createObjectURL(task.image)} className="w-[300px]" alt="" />
+            }
+            <button className="bg-red-600 p-2 w-fit mx-auto" onClick={handleSubmit}>Registrar tarea</button>
         </form>
     )
 }
