@@ -8,8 +8,9 @@ export default function RegisterForm() {
     const router = useRouter()
     const [user, setUser] = useState({
         email: "",
-        password: ""
-    })
+        password: "",
+        confirmPassword: "",
+    });
 
     const register = async () => {
         try {
@@ -31,8 +32,11 @@ export default function RegisterForm() {
     return (
         <form onSubmit={(e) => {
             e.preventDefault()
+            if (user.password !== user.confirmPassword) {
+                alert("Las contraseñas no coinciden");
+                return
+            }
             register()
-
         }}
             className="flex flex-col w-full max-w-sm"
         >
@@ -44,6 +48,12 @@ export default function RegisterForm() {
             />
             <input
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
+                type="password"
+                placeholder="Ingresa tu contraseña"
+                className="p-2 mb-4 border rounded"
+            />
+            <input
+                onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
                 type="password"
                 placeholder="Ingresa tu contraseña"
                 className="p-2 mb-4 border rounded"
