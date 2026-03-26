@@ -1,6 +1,6 @@
 "use client"
 import { createClient } from "@/utils/supabase/client";
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 export default function TaskForm() {
 
@@ -9,6 +9,8 @@ export default function TaskForm() {
         description: '',
         image: null
     });
+
+    const inputFileRef = useRef(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,7 +60,7 @@ export default function TaskForm() {
     }
 
     return (
-        <form className="flex flex-col bg-red-500 w-[50%] mx-auto p-3 rounded-2xl gap-5">
+        <form className="flex flex-col bg-red-500 w-[50%] mx-auto p-3 rounded-2xl gap-5 items-center">
             <input
                 type="text"
                 placeholder="Titulo de la tarea"
@@ -68,15 +70,26 @@ export default function TaskForm() {
             <textarea
                 type="text"
                 placeholder="Descripcion de tarea"
-                
+
                 onChange={(e) => setTask({ ...task, description: e.target.value })}
                 className="border border-white p-2"
             />
-            <input type="file" onChange={(e) => setTask({ ...task, image: e.target.files[0] })} name="imagen" />
+            <input ref={inputFileRef} className="hidden" type="file" onChange={(e) => setTask({ ...task, image: e.target.files[0] })} name="imagen" />
             {
                 task.image
                 &&
-                <img src={URL.createObjectURL(task.image)} className="w-[300px]" alt="" />
+                <img onClick={()=>{
+                    inputFileRef.current.click()
+                }} src={URL.createObjectURL(task.image)} className="w-[300px] cursor-pointer hover:scale-105" alt="" />
+            }
+            {
+                !task.image
+                &&
+                <div onClick={()=>{
+                    inputFileRef.current.click()
+                }}>
+                    Selecciona tu imagen
+                </div>
             }
             <button className="bg-red-600 p-2 w-fit mx-auto" onClick={handleSubmit}>Registrar tarea</button>
         </form>
