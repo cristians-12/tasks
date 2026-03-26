@@ -1,5 +1,6 @@
 "use client"
 import { createClient } from "@/utils/supabase/client";
+import Image from "next/image";
 import { useRef, useState } from "react"
 
 export default function TaskForm() {
@@ -78,9 +79,11 @@ export default function TaskForm() {
             {
                 task.image
                 &&
-                <img onClick={()=>{
+               <div className="relative h-[200px] w-[50%]">
+                 <Image sizes="100%" fill onClick={()=>{
                     inputFileRef.current.click()
-                }} src={URL.createObjectURL(task.image)} className="w-[300px] cursor-pointer hover:scale-105" alt="" />
+                }} src={URL.createObjectURL(task.image)} className="object-cover cursor-pointer hover:scale-105" alt="" />
+               </div>
             }
             {
                 !task.image
