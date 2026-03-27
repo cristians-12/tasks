@@ -21,8 +21,8 @@ export default function TaskCard({ task }) {
     }, [image]);
 
     return (
-        <div>
-            <img src={imageUrl} alt={title} />
+        <div className="w-[35%]">
+            <img className="w-[100%] h-[250px] object-cover" src={imageUrl} alt={title} />
             <p>{title}</p>
             <p>{description}</p>
         </div>

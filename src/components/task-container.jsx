@@ -28,7 +28,7 @@ export default function TaskContainer() {
     )
 
     return (
-        <div>
+        <div className="flex gap-5">
             {
                 tasks.length > 0 
                 ? (
